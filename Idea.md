@@ -26,5 +26,3 @@
   * Short algo summary
     * all ants start in a node -> choose next node depending on closeness and phereomones on edges -> pheromones on edges are updated. repeats until all ants travel the same path or a maximum of iterations has occured.
 
-* Ahname und basic structure wo i wür mache
-  * 
