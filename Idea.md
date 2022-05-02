@@ -1,4 +1,6 @@
-# idea for project
+# project
+
+## basic design decitions
 
 * Ants
   * are they allowed to visit same node twice?
@@ -13,16 +15,20 @@
   * Can some nodes be more desirable
   * How are nodes generated?
 
-* Paper
-  * Ants
-    * the distances an location of the towns is known to them
-    * The amount of pheromons leading to each node is known.
-    * Ants are only allowed to go to unvisited nodes
-    * lays pheromones after compleded tour
-  * Pheromenes
-    * layd by ants after completed tour, on each treveled edge
-    * amount layed on each each edge dependend on length of tour and a constant
-    * pheromones evaporate with a factor rho
-  * Short algo summary
-    * all ants start in a node -> choose next node depending on closeness and phereomones on edges -> pheromones on edges are updated. repeats until all ants travel the same path or a maximum of iterations has occured.
+## Paper
 
+* Ants
+  * the distances between, and location of the nodes is known to them
+  * The amount of pheromons leading to each node is known.
+  * Ants are only allowed to go to unvisited nodes
+  * lays pheromones after compleded tour
+* Pheromenes
+  * layd by ants after completed tour, on each treveled edge
+  * amount layed on each each edge dependend on length of tour and a constant
+  * pheromones evaporate with a factor rho
+* Short algo summary
+  * all ants start in a node -> choose next node depending on closeness and phereomones on edges -> pheromones on edges are updated. repeats until all ants travel the same path or a maximum of iterations has occured.
+
+## bemerkige
+
+* wemmer disign idee vom Paper übernimmt binimer zimmli sicher dases kein Steiner tree geh wird, dah d Ameise sich nur uf gradlinige edges zwüsched de Nodes bewege derfed.
