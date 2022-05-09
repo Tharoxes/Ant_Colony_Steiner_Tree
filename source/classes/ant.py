@@ -3,5 +3,8 @@
 """
 this file contains at least two classes
 ant class
-pheromone class
+
 """
+
+class Ant:
+    def __init__(self)
