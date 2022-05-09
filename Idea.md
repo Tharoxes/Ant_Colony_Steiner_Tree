@@ -4,16 +4,20 @@
 
 * Ants
   * are they allowed to visit same node twice?
+  - yes, multiple times, but at the of every iteration the pheromone will be placed
   * do they travel on the edges (paper), or freely (either a grid or complitely free)?
+  - edges
   * do they go from node to node, or return to a specific node after a visit i.e. do they have a nest?
+  -no, they can be anywhere
   * how are pheromones deposited? Depending parameters?
-  * Abnahm vo Pheromon?
-  * laufed ahli ameise uf eimal oder "einzel"?
+  -empirical and referencing to the papers
   * Are Pheromones deposited continously or only once each cycle?
+  - all at once at the end of the iteration
 
 * Nodes
   * Can some nodes be more desirable
   * How are nodes generated?
+  - nodes as middle of the circle
 
 ## Paper
 
