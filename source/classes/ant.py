@@ -5,6 +5,8 @@ this file contains at least two classes
 ant class
 
 """
+import numpy as np
+import random as rd
 
 class Ant:
     def __init__(self, position: int):
@@ -41,3 +43,24 @@ class Ant:
         if((edge[1], edge[0]) in self.path): return 
         
         self.path.append(edge)
+        
+
+
+def move_ant(ant: Ant):
+    """moves an Ant to a new node"""
+    possible = nodes.connect(ant.position) #i somehow need the possible conections from a given node
+    
+    smart_choice_prob = 0.75 #probability to make the optimal choice
+    #make not smart choice
+    if(not (rd.random() < smart_choice_prob)):
+        ant.update_position(np.choice(possible, 1))
+    
+    #find the best next choice -> assumption pheromones are saved as a tuple (i,j)
+    best_next = (possible[0], pheromones[ant.pos, possible[0]])
+    for i in range(1, len(possible)):
+        pheromones_onedge = pheromones[ant.pos, possible[i]]
+        if  pheromones_onedge > best_next[1]:
+            best_next = possible[i], pheromones_onedge
+            
+    ant.update_position(best_next[0])
+            
