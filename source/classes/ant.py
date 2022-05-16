@@ -60,7 +60,7 @@ def move_ant(ant: Ant):
     for i in range(1, len(possible)):
         pheromones_onedge = pheromones[ant.pos, possible[i]]
         if  pheromones_onedge > best_next[1]:
-            best_next = possible[i], pheromones_onedge
+            best_next = (possible[i], pheromones_onedge)
             
     ant.update_position(best_next[0])
             
