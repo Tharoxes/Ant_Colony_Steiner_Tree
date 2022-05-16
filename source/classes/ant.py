@@ -6,7 +6,6 @@ ant class
 
 """
 import numpy as np
-import random as rd
 
 class Ant:
     def __init__(self, position: int, nodes: list):
@@ -22,6 +21,7 @@ class Ant:
         """updates the position of the ant"""
         #get the travelled edge
         travelled_edge = (self.position, newPos)
+        travelled_edge = (min(travelled_edge), max(travelled_edge))
         
         #check if the newPos is in the must visit nodes and not already visited
         if(newPos in self.nodes and not newPos in self.visited):
@@ -40,27 +40,36 @@ class Ant:
     def update_path(self, edge: tuple):
         """helper function for updating a travelled edge"""
         if(edge in self.path): return
-        if((edge[1], edge[0]) in self.path): return 
-        
         self.path.append(edge)
         
 
 
 def move_ant(ant: Ant):
     """moves an Ant to a new node"""
-    possible = nodes.connect(ant.position) #i somehow need the possible conections from a given node
+    """rewrite to ask map an index -> map returns the possible next ones and their prob"""
+    # possible = nodes.connect(ant.position) #i somehow need the possible conections from a given node
     
-    smart_choice_prob = 0.75 #probability to make the optimal choice
-    #make not smart choice
-    if(not (rd.random() < smart_choice_prob)):
-        ant.update_position(np.choice(possible, 1))
+    # smart_choice_prob = 0.75 #probability to make the optimal choice
+    # #make not smart choice
+    # if(not (rd.random() < smart_choice_prob)):
+    #     ant.update_position(np.choice(possible, 1))
     
-    #find the best next choice -> assumption pheromones are saved as a tuple (i,j)
-    best_next = (possible[0], pheromones[ant.pos, possible[0]])
-    for i in range(1, len(possible)):
-        pheromones_onedge = pheromones[ant.pos, possible[i]]
-        if  pheromones_onedge > best_next[1]:
-            best_next = (possible[i], pheromones_onedge)
+    # #find the best next choice -> assumption pheromones are saved as a tuple (i,j)
+    # best_next = (possible[0], pheromones[ant.pos, possible[0]])
+    # for i in range(1, len(possible)):
+    #     pheromones_onedge = pheromones[ant.pos, possible[i]]
+    #     if  pheromones_onedge > best_next[1]:
+    #         best_next = (possible[i], pheromones_onedge)
             
-    ant.update_position(best_next[0])
+    # ant.update_position(best_next[0])
+    
+    possible = Map.get_possible(ant.pos)
+    
+    move_to = np.random.choice(index, p = prob)#index index list, prob = probabilities
+    
+    ant.update(move_to)
+    pass
+    
+    
+    
             
