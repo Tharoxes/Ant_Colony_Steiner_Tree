@@ -4,11 +4,9 @@ import node
 
 
 class Map:
-    def __init__(self, node_list: dict, paths: np.ndarray, distances: np.ndarray, index: int):
+    def __init__(self, node_list: dict, paths: np.ndarray):
         self.node_list = node_list # {1: x,y, , 2, 3, etc.}
         self.paths = paths # [[1, 2, 100], [3, 2, 42], etc.] [index, index, pheromone] always smaller index at the front
-        self.distances = distances
-        self.index = index
 
     def add_connection(self, connection: np.ndarray):
         np.append(self.paths, connection, axis=0)

@@ -15,10 +15,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import heapq
 import math
-from classes import ant
+from classes import ant, node, map
 
 
-def move_ant(ant: Ant):
+def move_ant(ant: ant.Ant):
     """moves an Ant to a new node"""
     """rewrite to ask map an index -> map returns the possible next ones and their prob"""
     # possible = nodes.connect(ant.position) #i somehow need the possible conections from a given node
@@ -37,7 +37,7 @@ def move_ant(ant: Ant):
             
     # ant.update_position(best_next[0])
     
-    possible = Map.get_possible(ant.pos)
+    possible = map.Map.get_possible(ant.pos)
     possible = np.transpose(possible)
     
     move_to = np.random.choice(possible[0], p = possible[1])#index index list, prob = probabilities
@@ -46,16 +46,26 @@ def move_ant(ant: Ant):
     return
 
 def main():
+    #generate node_list
+
+    #generate paths
+
+    #generate map
+
     # generate ants in a list
 
     ant1 = ant.Ant(0, np.array([0, 1, 2, 3])) #index, must visited nodes list(indices)
     # for every ant, I get the actual position
+        # return for every ant every possible path
 
     #loop for the ants list until all necessary nodes are visited by all ants
     #move ant
 
-    #until no new nodes are generated
+    # update pheromones (delete edges or evaporation)
 
+    # add new nodes
+
+    #until no new nodes are generated
 
 
 if __name__ == "__main__":
