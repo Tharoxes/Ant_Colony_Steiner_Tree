@@ -15,15 +15,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import heapq
 import math
-
-def decide():
-    pass
-
-
+from classes import ant
 
 
 def main():
-    pass
+    # generate ants in a list
+
+    ant1 = ant.Ant(0, np.array([0, 1, 2, 3])) #index, must visited nodes list(indices)
+    # for every ant, I get the actual position
+
+    #loop for the ants list until all necessary nodes are visited by all ants
+    #move ant
+
+    #until no new nodes are generated
+
 
 
 if __name__ == "__main__":
