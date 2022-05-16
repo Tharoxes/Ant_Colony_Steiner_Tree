@@ -9,10 +9,10 @@ import numpy as np
 import random as rd
 
 class Ant:
-    def __init__(self, position: int):
+    def __init__(self, position: int, nodes: list):
         """position = index of current node, nodes = must visit nodes, path = travelled path, visited = already visited nodes (must visit nodes)
         visited_all : a bolean to check if a ant has visited all must visit nodes"""
-        self.nodes = []
+        self.nodes = nodes
         self.path = []
         self.position = position
         self.visited = [position]
