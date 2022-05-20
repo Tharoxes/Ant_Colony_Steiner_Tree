@@ -11,6 +11,8 @@
 """
 
 # -*- coding: utf-8 -*-
+import random
+
 import numpy as np
 import matplotlib.pyplot as plt
 import heapq
@@ -46,22 +48,54 @@ def move_ant(ant: ant.Ant):
     return
 
 def main():
+    # setup
+    evaporation = 0.9
+    real_nodes = 4
+    artificial_nodes = 0
     #generate node_list
+    node_dict = {
+        1: {"position": np.asarray([0,1]), "real": True},
+        2: {"position": np.asarray([0,0]), "real": True},
+        3: {"position": np.asarray([2,1]), "real": True},
+        4: {"position": np.asarray([2,0]), "real": True},
+    }
+    paths = np.zeros((1,3))
+    for start in node_dict:
+        for end in node_dict:
+            if start < end:
+                np.append(paths, [[start, end]])
+
+    pheromones = np.zeros((real_nodes, 1))
+
+    map = map.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
 
     #generate paths
 
     #generate map
 
     # generate ants in a list
+    number_ants = 0
+    if len(map.node_list) < 10:
+        number_ants = 10
+    else:
+        number_ants = len(map.node_list)
 
-    ant1 = ant.Ant(0, np.array([0, 1, 2, 3])) #index, must visited nodes list(indices)
-    # for every ant, I get the actual position
-        # return for every ant every possible path
 
-    #loop for the ants list until all necessary nodes are visited by all ants
-    #move ant
+    ants_path = list()
+    for i in range(number_ants):
+        ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes))
+        while # todo: ant not visited all real nodes
+            # todo: move ant to index xy
+            possible_paths = map.get_possible_paths(ant_pos=...) # todo: index xy
+            ants_path = ... # add to the path, if not already visited
+        ants_path.append(...) # add the path of an ant to the list example [[0, 1][1, 3][3, 2][2, 4]]
 
     # update pheromones (delete edges or evaporation)
+    # old pheromones
+    map.evaporate(evaporation)
+
+    # add new pheromones
+    map.add_new_pheromones(ants_path=ants_path)
 
     # add new nodes
 
