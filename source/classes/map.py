@@ -33,9 +33,9 @@ class Map:
         for ant in ants_path:
             for path in ant:
                 if path[0] < path[1]:
-                    index = np.where([path[0], path[1]])
+                    index = np.where([path[0], path[1]] == self.node_list)
                 else:
-                    index = np.where([path[1], path[0]])
+                    index = np.where([path[1], path[0]] == self.node_list)
                 self.pheromone[index] += 1
 
     def get_possible_paths(self, ant_pos: int):
