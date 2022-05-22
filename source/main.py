@@ -21,7 +21,7 @@ from classes import ant, node
 from classes import map as mp
 
 
-def move_ant(ant: ant.Ant):
+def move_ant(ant: ant.Ant, map: mp.Map):
     """moves an Ant to a new node"""
     """rewrite to ask map an index -> map returns the possible next ones and their prob"""
     # possible = nodes.connect(ant.position) #i somehow need the possible conections from a given node
@@ -40,7 +40,7 @@ def move_ant(ant: ant.Ant):
             
     # ant.update_position(best_next[0])
     
-    possible = mp.Map.get_possible(ant.pos)
+    possible = map.get_possible_paths(ant.position)
     possible = np.transpose(possible)
     
     move_to = np.random.choice(possible[0], p = possible[1])#index index list, prob = probabilities
@@ -90,7 +90,7 @@ def main():
             # todo: move ant to index xy
             # possible_paths = map.get_possible_paths(current_ant.position) # todo: index xy
             # ants_path = ... # add to the path, if not already visited
-            move_ant(current_ant)
+            move_ant(current_ant, map)
         ants_path += current_ant.path # add the path of an ant to the list example [[0, 1][1, 3][3, 2][2, 4]]
 
     # update pheromones (delete edges or evaporation)
