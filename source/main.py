@@ -40,6 +40,7 @@ def move_ant(ant: ant.Ant, map: mp.Map):
             
     # ant.update_position(best_next[0])
     
+    
     possible = map.get_possible_paths(ant.position)
     possible = np.transpose(possible)
     
@@ -60,6 +61,8 @@ def main():
         3: {"position": np.asarray([2,1]), "real": True},
         4: {"position": np.asarray([2,0]), "real": True},
     }
+    
+    #??? np.append(paths, [[1,2]]) fürt zu: Out[55]: array([0., 0., 0., 1., 2.]), und im map staht doch du wotsch [index, index, pheromone]
     paths = np.zeros((1,3))
     for start in node_dict:
         for end in node_dict:
@@ -85,7 +88,7 @@ def main():
     
     ants_path = list()
     for i in range(number_ants):
-        current_ant = ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes))
+        current_ant = ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes + 1))
         while not current_ant.visited_all:
             # todo: move ant to index xy
             # possible_paths = map.get_possible_paths(current_ant.position) # todo: index xy
