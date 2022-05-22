@@ -17,7 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import heapq
 import math
-from classes import ant, node, map
+from classes import ant, mp, node
 
 
 def move_ant(ant: ant.Ant):
@@ -67,7 +67,7 @@ def main():
 
     pheromones = np.zeros((real_nodes, 1))
 
-    map = map.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
+    map = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
 
     #generate paths
 
@@ -80,15 +80,17 @@ def main():
     else:
         number_ants = len(map.node_list)
 
-
+    
+    
     ants_path = list()
     for i in range(number_ants):
-        ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes))
-        while # todo: ant not visited all real nodes
+        current_ant = ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes))
+        while not current_ant.visited_all:
             # todo: move ant to index xy
-            possible_paths = map.get_possible_paths(ant_pos=...) # todo: index xy
-            ants_path = ... # add to the path, if not already visited
-        ants_path.append(...) # add the path of an ant to the list example [[0, 1][1, 3][3, 2][2, 4]]
+            # possible_paths = map.get_possible_paths(current_ant.position) # todo: index xy
+            # ants_path = ... # add to the path, if not already visited
+            move_ant(current_ant)
+        ants_path += current_ant.path # add the path of an ant to the list example [[0, 1][1, 3][3, 2][2, 4]]
 
     # update pheromones (delete edges or evaporation)
     # old pheromones
