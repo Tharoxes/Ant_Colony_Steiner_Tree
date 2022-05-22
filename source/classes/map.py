@@ -1,6 +1,6 @@
 # todo: map class can track and save the routes as .csv or something else
 import numpy as np
-import node
+# import node
 
 
 class Map:
