@@ -17,7 +17,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import heapq
 import math
-from classes import ant, mp, node
+from classes import ant, node 
+from classes import map as mp
 
 
 def move_ant(ant: ant.Ant):
@@ -39,7 +40,7 @@ def move_ant(ant: ant.Ant):
             
     # ant.update_position(best_next[0])
     
-    possible = map.Map.get_possible(ant.pos)
+    possible = mp.Map.get_possible(ant.pos)
     possible = np.transpose(possible)
     
     move_to = np.random.choice(possible[0], p = possible[1])#index index list, prob = probabilities
