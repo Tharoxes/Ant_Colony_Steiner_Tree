@@ -56,18 +56,21 @@ def main():
     artificial_nodes = 0
     #generate node_list
     node_dict = {
-        1: {"position": np.asarray([0,1]), "real": True},
-        2: {"position": np.asarray([0,0]), "real": True},
-        3: {"position": np.asarray([2,1]), "real": True},
-        4: {"position": np.asarray([2,0]), "real": True},
+        0: {"position": np.asarray([0,1]), "real": True},
+        1: {"position": np.asarray([0,0]), "real": True},
+        2: {"position": np.asarray([2,1]), "real": True},
+        3: {"position": np.asarray([2,0]), "real": True},
     }
     
     #??? np.append(paths, [[1,2]]) fürt zu: Out[55]: array([0., 0., 0., 1., 2.]), und im map staht doch du wotsch [index, index, pheromone]
-    paths = np.zeros((1,3))
+    paths = [[0,0]]
     for start in node_dict:
         for end in node_dict:
             if start < end:
-                np.append(paths, [[start, end]])
+                paths = np.append(paths, [[start, end]], axis=0)
+
+    paths = np.delete(paths, 0, 0)
+    print(paths)
 
     pheromones = np.zeros((real_nodes, 1))
 
@@ -88,7 +91,7 @@ def main():
     
     ants_path = list()
     for i in range(number_ants):
-        current_ant = ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes + 1)) #if nodes start at 0 the last +1 needs to be deleted
+        current_ant = ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes)) #if nodes start at 0 the last +1 needs to be deleted
         while not current_ant.visited_all:
             # todo: move ant to index xy
             # possible_paths = map.get_possible_paths(current_ant.position) # todo: index xy

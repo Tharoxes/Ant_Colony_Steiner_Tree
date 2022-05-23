@@ -5,9 +5,12 @@ import numpy as np
 
 class Map:
     def __init__(self, node_list: dict, paths: np.ndarray, pheromones: np.ndarray):
+        self.N = 1000
         self.node_list = node_list # {1: x,y, , 2, 3, etc.}
-        self.paths = paths # [[1, 2, 100], [3, 2, 42], etc.] [index, index, pheromone] always smaller index at the front
-        self.pheromone = pheromones
+        self.paths = paths # [[1, 2], [3, 2], etc.] [index, index, pheromone] always smaller index at the front
+        self.pheromone = pheromones # [100]
+        self.graph = [[] for i in range(self.N)]
+        self.cycles = [[] for i in range(self.N)]
 
     def add_connection(self, connection: np.ndarray):
         np.append(self.paths, connection, axis=0)
@@ -21,9 +24,66 @@ class Map:
     def create_node(self, index, position, real):
         self.node_list[index] = {"position": position, "real": real}
 
+    def dfs_cycles(self, u, p, color: list, mark: list, par: list):
+        global cyclenumber
 
-    def dfs(self):
-        pass
+        if color[u] == 2:
+            return
+
+        # seen vertex, but was not
+        # completely visited -> cycle detected.
+        # backtrack based on parents to
+        # find the complete cycle.
+        if color[u] == 1:
+            cyclenumber += 1
+            cur = p
+            mark[cur] = cyclenumber
+
+            # backtrack the vertex which are
+            # in the current cycle thats found
+            while cur != u:
+                cur = par[cur]
+                mark[cur] = cyclenumber
+
+            return
+
+        par[u] = p
+
+        # partially visited.
+        color[u] = 1
+
+        # simple dfs on graph
+        for v in self.graph[u]:
+
+            # if it has not been visited previously
+            if v == par[u]:
+                continue
+            self.dfs_cycles(v, u, color, mark, par)
+
+        # completely visited.
+        color[u] = 2
+
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+        self.graph[v].append(u)
+
+    # Function to print the cycles
+    def printCycles(self, edges, mark: list):
+
+        # push the edges that into the
+        # cycle adjacency list
+        for i in range(1, edges + 1):
+            if mark[i] != 0:
+                self.cycles[mark[i]].append(i)
+
+        # print all the vertex with same cycle
+        for i in range(1, cyclenumber + 1):
+
+            # Print the i-th cycle
+            print("Cycle Number %d:" % i, end=" ")
+            for x in self.cycles[i]:
+                print(x, end=" ")
+            print()
 
     def evaporate(self, evaporation=0.9): # how to update new connections with low costs
         for path in self.paths:
@@ -40,11 +100,11 @@ class Map:
 
     def get_possible_paths(self, ant_pos: int):
         possible_paths = []
-        for path in self.paths:
+        for index, path in enumerate(self.paths):
             if ant_pos == path[0]:
-                possible_paths.append(path[1:3])
+                possible_paths.append([path[1], self.pheromone[index]])
             elif ant_pos == path[1]:
-                possible_paths.append(path[0, 2])
+                possible_paths.append([path[0], self.pheromone[index]])
         possible_paths = np.asarray(possible_paths)
         sum = np.sum(possible_paths, axis=0)
         sum = sum[1]
