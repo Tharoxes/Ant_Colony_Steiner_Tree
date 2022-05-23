@@ -88,7 +88,7 @@ def main():
     
     ants_path = list()
     for i in range(number_ants):
-        current_ant = ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes + 1))
+        current_ant = ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes + 1)) #if nodes start at 0 the last +1 needs to be deleted
         while not current_ant.visited_all:
             # todo: move ant to index xy
             # possible_paths = map.get_possible_paths(current_ant.position) # todo: index xy
