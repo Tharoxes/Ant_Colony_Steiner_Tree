@@ -17,6 +17,8 @@ import map as mp
 import numpy as np
 
 def plot_one(map: mp.Map):
+    """plots the map
+    Remark: Because of normalizatio not all edges are always visible"""
     nodes = map.node_list
     nodes_coor = []
     colorlist = []
@@ -30,37 +32,63 @@ def plot_one(map: mp.Map):
     
     
     nodes_coor = np.array(nodes_coor)
-    
-    
-    nodesource = ColumnDataSource(data = {
+    node_source = ColumnDataSource(data = {
         "x": nodes_coor[:,0], 
         "y": nodes_coor[:,1],
         "color": colorlist})
     
+    paths = map.paths
+    x0, x1, y0, y1 = [],[],[],[]
+    for edge in paths:
+        x0.append(nodes[edge[0]]["position"][0])
+        y0.append(nodes[edge[0]]["position"][1])
+        x1.append(nodes[edge[1]]["position"][0])
+        y1.append(nodes[edge[1]]["position"][1])
+     
+           
+    
+    edge_source = ColumnDataSource(data = {
+        "x0": x0,
+        "y0": y0,
+        "x1": x1,
+        "y1": y1,
+        "pher": (np.array(map.pheromone) - np.min(map.pheromone))/ (np.max(map.pheromone)- np.min(map.pheromone)) 
+        })
+    
+    
+                 
+    
+    
     
     
     p = figure()
-    p.circle(x = "x", y = "y", color = "color", source = nodesource)
+    p.circle(x = "x", y = "y", color = "color", source = node_source)
+    p.segment(x0 = "x0", y0 = "y0", x1 = "x1", y1 = "y1", color = "black", alpha = "pher", line_width = 1, source = edge_source)
+    
     show(p)
-    return
+    
+    
+    return 
 
 
 
+def main():
+
+    node_dict = {
+        1: {"position": np.asarray([0,1]), "real": True},
+        2: {"position": np.asarray([0,0]), "real": True},
+        3: {"position": np.asarray([2,1]), "real": True},
+        4: {"position": np.asarray([2,0]), "real": True},
+    }
+    
+    paths = [[1,2], [2,3], [1,3], [2,4]]
+    
+    pheromones = [60, 50, 50, 50]
+    
+    mapi = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
+    
+    plot_one(mapi)
 
 
-node_dict = {
-    1: {"position": np.asarray([0,1]), "real": True},
-    2: {"position": np.asarray([0,0]), "real": True},
-    3: {"position": np.asarray([2,1]), "real": True},
-    4: {"position": np.asarray([2,0]), "real": True},
-}
-
-paths = np.zeros((1,3))
-for start in node_dict:
-    for end in node_dict:
-        if start < end:
-            np.append(paths, [[start, end]])
-
-pheromones = np.zeros((4, 1))
-
-map = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
+if __name__ == "__main__":
+    main()
