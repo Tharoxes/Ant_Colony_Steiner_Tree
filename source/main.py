@@ -70,7 +70,7 @@ def main():
                 paths = np.append(paths, [[start, end]], axis=0)
 
     paths = np.delete(paths, 0, 0)
-    print(paths)
+    #print(type(paths))
 
     pheromones = np.zeros((real_nodes, 1))
 
@@ -91,7 +91,7 @@ def main():
     
     ants_path = list()
     for i in range(number_ants):
-        current_ant = ant.Ant(random.randint(1, real_nodes), np.arange(1, real_nodes)) #if nodes start at 0 the last +1 needs to be deleted
+        current_ant = ant.Ant(random.randint(0, real_nodes), np.arange(0, real_nodes)) #if nodes start at 0 the last +1 needs to be deleted
         while not current_ant.visited_all:
             # todo: move ant to index xy
             # possible_paths = map.get_possible_paths(current_ant.position) # todo: index xy
