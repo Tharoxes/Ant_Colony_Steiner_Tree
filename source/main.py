@@ -55,6 +55,7 @@ def main():
     real_nodes = 4
     iterations = 30
     artificial_nodes = 0
+    N = 300
 
     real_nodes_index = list(range(0, real_nodes))
     # generate node_list
@@ -114,8 +115,16 @@ def main():
         # add new pheromones
         map.add_new_pheromones()
 
-        # add new nodes
+        # cycle search
+        color = [0] * N
+        par = [0] * N
+        mark = [0] * N
+        cyclenumer = 0
+        map.addEdges()
+        map.dfs_cycles(1, 0, color, mark, par)
+        map.safe_Cycles(mark)
 
+        # add new nodes
         for j in map.cycles[artificial_nodes:]:
             map.new_artificial_node(real_nodes + artificial_nodes, j)
             artificial_nodes += 1

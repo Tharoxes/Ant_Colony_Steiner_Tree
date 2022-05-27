@@ -49,6 +49,15 @@ class Map:
 
     # dfs function to find cycles in graph
     def dfs_cycles(self, u, p, color: list, mark: list, par: list):
+        """
+
+        @param u: int; actual node
+        @param p: int, parent node of u
+        @param color: list int, colorization for visited nodes
+        @param mark: list int, marked nodes for a certain cycle
+        @param par: list of int, parents of all nodes
+        @return:
+        """
         global cyclenumber
 
         if color[u] == 2:
@@ -89,6 +98,10 @@ class Map:
 
     # consider the edges above certain pheromone level
     def addEdges(self, threshhold=0.1):
+        """
+
+        @param threshhold: updated the list of considered edges above a certain pheromone level
+        """
         connections = self.paths[self.paths > threshhold]
         self.graph = [[] for i in range(self.N)]
         self.edges = 0
@@ -98,10 +111,14 @@ class Map:
             self.graph[connection[1]].append(connection[0])
 
     # Function to safe new cycles
-    def safe_Cycles(self, edges, mark: list):
+    def safe_Cycles(self, mark: list):
+        """
 
+        @param edges: list of int; number of the edges
+        @param mark: list; marked nodes in a cycle
+        """
         new_cycles = list()
-        for i in range(1, edges):
+        for i in range(1, self.edges):
             if mark[i] != 0:
                 new_cycles[mark[i]].append(i)
 
@@ -111,10 +128,18 @@ class Map:
                 self.cycles.append(sorted_cycle)
 
     def evaporate(self, evaporation=0.9): # how to update new connections with low costs
+        """
+
+        @rtype: rate of pheromones vaporization from t to t+1
+        """
         for path in self.paths:
             path[2] *= evaporation
 
     def add_new_pheromones(self, Q=1):
+        """
+
+        @rtype: updates the pheromones by adding Q / L_k
+        """
         for i, connection in enumerate(self.connections):
             for path in connection:
                 if path[0] < path[1]:
@@ -124,6 +149,13 @@ class Map:
                 self.pheromone[index] += Q / self.lengths[i]
 
     def get_probability(self, ant_pos: int, alpha=1, beta=5):
+        """
+
+        @param ant_pos: int; position of the ant on Node xy
+        @param alpha: float; from the paper to calculate the probability and give weights on pheromones
+        @param beta: float; from the paper to calculate the probability and give weights on desirability
+        @return: np.ndarray, shape(possible nodes, probabilities) (possible node: int, probability 0-1);
+        """
         distances = np.array([[0]])
         pheromones = np.array([[0]])
         possible_nodes = np.array([[0]])
