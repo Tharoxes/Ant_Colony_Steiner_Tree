@@ -8,7 +8,7 @@ class Map:
         self.N = 300
         self.node_list = node_list # {1: x,y, , 2, 3, etc.} dict with np.ndarray and bool
         self.paths = paths # [[1, 2], [3, 2], etc.] [index, index] always smaller index at the front
-        self.pheromone = pheromones # relativ values
+        self.pheromone = pheromones # relativ values 2d array
         self.probability = []
         self.connections = list()
         self.lengths = np.asarray([])
@@ -132,7 +132,7 @@ class Map:
             print(type(path))
             if ant_pos == path[0] or ant_pos == path[1]:
                 distances = np.append(distances, np.array([[(1 / self.compute_2node(path[0], path[1])) ** alpha]]), axis=0)
-                pheromones = np.append(pheromones, np.array([[self.pheromone[index] ** beta]]), axis=0)
+                pheromones = np.append(pheromones, np.array([self.pheromone[index] ** beta]), axis=0)
             if ant_pos == path[0]:
                 possible_nodes = np.append(possible_nodes, np.array([[path[1]]]), axis=0)
             elif ant_pos == path[1]:
