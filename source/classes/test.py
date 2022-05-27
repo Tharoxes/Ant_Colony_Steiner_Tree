@@ -19,16 +19,26 @@ print(a.n)
 print(a.list)
 """
 
-a = np.zeros((2, 1))
-b = np.append(a, 3)
+arr1 = np.array([[1], [2]])
 
-c = [1, 2, 3, 4, 5, 6]
-#print(type(c))
-d = [c[i] for i in [5, 4, 3, 2, 1, 0]]
-#print(d)
-#print(b)
+arr2 = np.array([[5], [6]])
 
-#print(np.zeros((4, 3, 2)))
+arr = np.concatenate((arr1, arr2), axis=1)
+
+distances = np.array([[0]])
+distances = np.append(distances, np.array([[5]]), axis=0)
+distances = np.append(distances, np.array([[6]]), axis=0)
+distances = distances[1:]
+
+d = np.array([[0]])
+d = np.append(d, np.array([[5]]), axis=0)
+d = np.append(d, np.array([[6]]), axis=0)
+d = d[1:]
+
+print(distances)
+print(d)
+bla = np.concatenate((distances, d), axis=1)
+print(bla)
 
 N = 15
 print(np.sum(np.square(np.array([4, 2])-np.array([2, 3]))))
