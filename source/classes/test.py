@@ -1,6 +1,8 @@
 import numpy as np
 
 
+
+"""
 class test:
     def __init__(self, list):
         self.list = list
@@ -10,14 +12,38 @@ dict = {
     1: "h",
     2: "a",
 }
-
 a = test(dict)
 print(a.n)
 a.list[4] ="l"
 print(a.n)
 print(a.list)
+"""
+
+a = np.zeros((2, 1))
+b = np.append(a, 3)
+
+c = [1, 2, 3, 4, 5, 6]
+#print(type(c))
+d = [c[i] for i in [5, 4, 3, 2, 1, 0]]
+#print(d)
+#print(b)
+
+#print(np.zeros((4, 3, 2)))
 
 N = 15
+print(np.sum(np.square(np.array([4, 2])-np.array([2, 3]))))
+
+j = 0
+a = [1, 2, 3, 4, 5, 9]
+for i in a[j:]:
+    print(i)
+    j += 1
+
+a = [1, 2, 3, 4, 5, 9, 7, 8]
+for i in a[j:]:
+    #print(i)
+    j += 1
+
 
 # variables to be used
 # in both functions
@@ -87,7 +113,7 @@ def printCycles(edges, mark: list):
 
     # print all the vertex with same cycle
     for i in range(1, cyclenumber + 1):
-        print(cycles[i])
+        #print(cycles[i])
         """
         # Print the i-th cycle
         print("Cycle Number %d:" % i, end=" ")

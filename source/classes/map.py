@@ -6,25 +6,47 @@ import numpy as np
 class Map:
     def __init__(self, node_list: dict, paths: np.ndarray, pheromones: np.ndarray):
         self.N = 300
-        self.node_list = node_list # {1: x,y, , 2, 3, etc.}
+        self.node_list = node_list # {1: x,y, , 2, 3, etc.} dict with np.ndarray and bool
         self.paths = paths # [[1, 2], [3, 2], etc.] [index, index] always smaller index at the front
         self.pheromone = pheromones # relativ values
         self.connections = list()
+        self.lengths = np.asarray([])
         self.graph = [[] for i in range(self.N)]
         self.cycles = [[] for i in range(self.N)]
         self.edges = 0
         self.flag_node = len(self.node_list)
 
-    def add_connection(self, connection: np.ndarray):
-        np.append(self.paths, connection, axis=0)
+    def add_path(self, path: np.ndarray):
+        np.append(self.paths, path, axis=0)
         np.append(self.pheromone, np.asarray[[0.4]], axis=0)
 
-    def compute_length(self, index1: int, index2: int):
+    def compute_2node(self, index1: int, index2: int) -> float:
         return np.sum(np.square(self.node_list[index1]['position'] - self.node_list[index2]['position']))
 
-    def create_node(self, index, position, real):
+    def compute_ants_path(self, ants_connections: list):
+        for connection in ants_connections:
+            length = 0
+            self.connections.append(connection)
+            for path in connection:
+                length += self.compute_2node(path[0], path[1])
+            self.lengths = np.append(self.lengths, length)
+        sort_index = np.argsort(self.lengths)
+        self.lengths = np.sort(self.lengths)
+        self.connections = [self.connections[i] for i in sort_index]
+
+    def create_node(self, index: int, position: np.ndarray, real: bool):
         self.node_list[index] = {"position": position, "real": real}
 
+    def new_artificial_node(self, index, cycle):
+        center = np.asarray([0, 0])
+        counter = 0
+        for i in cycle:
+            center += self.node_list[i]["position"]
+            counter += 1
+        center = center / 4
+        self.create_node(index, center, False)
+
+    # dfs function to find cycles in graph
     def dfs_cycles(self, u, p, color: list, mark: list, par: list):
         global cyclenumber
 
@@ -64,6 +86,7 @@ class Map:
         # completely visited.
         color[u] = 2
 
+    # consider the edges above certain pheromone level
     def addEdges(self, threshhold=0.1):
         connections = self.paths[self.paths > threshhold]
         self.graph = [[] for i in range(self.N)]
@@ -73,7 +96,7 @@ class Map:
             self.graph[connection[0]].append(connection[1])
             self.graph[connection[1]].append(connection[0])
 
-    # Function to print the cycles
+    # Function to safe new cycles
     def safe_Cycles(self, edges, mark: list):
 
         new_cycles = list()
@@ -90,14 +113,14 @@ class Map:
         for path in self.paths:
             path[2] *= evaporation
 
-    def add_new_pheromones(self, ants_path: list):
-        for ant in ants_path:
-            for path in ant:
+    def add_new_pheromones(self, Q=1):
+        for i, connection in enumerate(self.connections):
+            for path in connection:
                 if path[0] < path[1]:
                     index = np.where([path[0], path[1]] == self.node_list)
                 else:
                     index = np.where([path[1], path[0]] == self.node_list)
-                self.pheromone[index] += 1
+                self.pheromone[index] += Q / self.lengths[i]
 
     def get_possible_paths(self, ant_pos: int):
         possible_paths = []

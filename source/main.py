@@ -53,6 +53,7 @@ def main():
     # setup
     evaporation = 0.9
     real_nodes = 4
+    iterations = 100
     artificial_nodes = 0
     #generate node_list
     node_dict = {
@@ -62,7 +63,6 @@ def main():
         3: {"position": np.asarray([2,0]), "real": True},
     }
     
-    #??? np.append(paths, [[1,2]]) fürt zu: Out[55]: array([0., 0., 0., 1., 2.]), und im map staht doch du wotsch [index, index, pheromone]
     paths = [[0,0]]
     for start in node_dict:
         for end in node_dict:
@@ -76,40 +76,49 @@ def main():
 
     map = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
 
-    #generate paths
 
-    #generate map
+    for i in range(iterations):
+        #generate paths
 
-    # generate ants in a list
-    number_ants = 0
-    if len(map.node_list) < 10:
-        number_ants = 10
-    else:
-        number_ants = len(map.node_list)
+        #generate map
 
-    
-    
-    ants_path = list()
-    for i in range(number_ants):
-        current_ant = ant.Ant(random.randint(0, real_nodes), np.arange(0, real_nodes)) #if nodes start at 0 the last +1 needs to be deleted
-        while not current_ant.visited_all:
-            # todo: move ant to index xy
-            # possible_paths = map.get_possible_paths(current_ant.position) # todo: index xy
-            # ants_path = ... # add to the path, if not already visited
-            move_ant(current_ant, map)
-        ants_path += current_ant.path # add the path of an ant to the list example [[0, 1][1, 3][3, 2][2, 4]]
+        # generate ants in a list
+        number_ants = 0
+        if len(map.node_list) < 10:
+            number_ants = 10
+        else:
+            number_ants = len(map.node_list)
 
-    # update pheromones (delete edges or evaporation)
-    # old pheromones
-    map.evaporate(evaporation)
+        # path for one node to another; connection for a tree to all necessary nodes
 
-    # add new pheromones
-    map.add_new_pheromones(ants_path=ants_path)
+        ants_connections = list()
+        for i in range(number_ants):
+            current_ant = ant.Ant(random.randint(0, real_nodes), np.arange(0, real_nodes)) #if nodes start at 0 the last +1 needs to be deleted
+            while not current_ant.visited_all:
+                # todo: move ant to index xy
+                # possible_paths = map.get_possible_paths(current_ant.position) # todo: index xy
+                # ants_path = ... # add to the path, if not already visited
+                move_ant(current_ant, map)
+            ants_connections.append(current_ant.path) # add the path of an ant to the list example [[0, 1][1, 3][3, 2][2, 4]]
 
-    # add new nodes
+        # add ants connections and compute their lengths, both lists are sorted
+        map.compute_ants_path(ants_connections)
 
+        # update pheromones (delete edges or evaporation)
+        # old pheromones
+        map.evaporate(evaporation)
 
-    #until no new nodes are generated
+        # add new pheromones
+        map.add_new_pheromones()
+
+        # add new nodes
+
+        for i in map.cycles[artificial_nodes:]:
+            map.new_artificial_node(real_nodes+artificial_nodes, i)
+            artificial_nodes += 1
+
+        if i % 11 == 0:
+            print(map.lengths[0])
 
 
 if __name__ == "__main__":
