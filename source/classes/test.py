@@ -31,22 +31,23 @@ distances = np.append(distances, np.array([[6]]), axis=0)
 distances = distances[1:]
 
 d = np.array([[0]])
-d = np.append(d, np.array([[5]]), axis=0)
-d = np.append(d, np.array([[6]]), axis=0)
+d = np.append(d, np.array([[3]]), axis=0)
+d = np.append(d, np.array([[4]]), axis=0)
 d = d[1:]
 
 print(distances)
 print(d)
 bla = np.concatenate((distances, d), axis=1)
 print(bla)
+print(bla[1, 0])
 
 N = 15
-print(np.sum(np.square(np.array([4, 2])-np.array([2, 3]))))
+#print(np.sum(np.square(np.array([4, 2])-np.array([2, 3]))))
 
 j = 0
 a = [1, 2, 3, 4, 5, 9]
 for i in a[j:]:
-    print(i)
+    # print(i)
     j += 1
 
 a = [1, 2, 3, 4, 5, 9, 7, 8]
@@ -158,7 +159,7 @@ if __name__ == "__main__":
 
     # mark with unique numbers
     mark = [0] * N
-    print(type(mark))
+    # print(type(mark))
 
     # store the numbers of cycle
     cyclenumber = 0

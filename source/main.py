@@ -45,7 +45,7 @@ def move_ant(ant: ant.Ant, map: mp.Map):
 
     move_to = np.random.choice(possible[0], p=possible[1])  # index index list, prob = probabilities
 
-    ant.update(move_to)
+    ant.update_position(move_to)
     return
 
 
@@ -75,7 +75,7 @@ def main():
     paths = np.delete(paths, 0, 0)
     # print(type(paths))
 
-    pheromones = np.zeros((real_nodes, 1))
+    pheromones = np.ones((np.shape(paths)[0], 1))
 
     map = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
 
@@ -95,7 +95,7 @@ def main():
 
         ants_connections = list()
         for k in range(number_ants):
-            current_ant = ant.Ant(random.randint(0, real_nodes),
+            current_ant = ant.Ant(random.randint(0, real_nodes-1),
                                   real_nodes_index)  # if nodes start at 0 the last +1 needs to be deleted
             while not current_ant.visited_all:
                 # todo: move ant to index xy
@@ -119,10 +119,13 @@ def main():
         color = [0] * N
         par = [0] * N
         mark = [0] * N
-        cyclenumer = 0
+        cyclenumber = 0
         map.addEdges()
-        map.dfs_cycles(1, 0, color, mark, par)
-        map.safe_Cycles(mark)
+        print(map.graph)
+        map.dfs_cycles(random.randint(0, real_nodes-1), -1, color, mark, par, cyclenumber)
+        print(cyclenumber)
+        print(mark)
+        map.safe_Cycles(mark, N)
 
         # add new nodes
         for j in map.cycles[artificial_nodes:]:

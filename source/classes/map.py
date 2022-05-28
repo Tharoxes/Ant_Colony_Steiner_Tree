@@ -48,7 +48,7 @@ class Map:
         self.create_node(index, center, False)
 
     # dfs function to find cycles in graph
-    def dfs_cycles(self, u, p, color: list, mark: list, par: list):
+    def dfs_cycles(self, u, p, color: list, mark: list, par: list, cyclenumber):
         """
 
         @param u: int; actual node
@@ -58,8 +58,6 @@ class Map:
         @param par: list of int, parents of all nodes
         @return:
         """
-        global cyclenumber
-
         if color[u] == 2:
             return
 
@@ -91,7 +89,7 @@ class Map:
             # if it has not been visited previously
             if v == par[u]:
                 continue
-            self.dfs_cycles(v, u, color, mark, par)
+            self.dfs_cycles(v, u, color, mark, par, cyclenumber)
 
         # completely visited.
         color[u] = 2
@@ -102,22 +100,22 @@ class Map:
 
         @param threshhold: updated the list of considered edges above a certain pheromone level
         """
-        connections = self.paths[self.paths > threshhold]
         self.graph = [[] for i in range(self.N)]
         self.edges = 0
-        for connection in connections:
-            self.edges += 1
-            self.graph[connection[0]].append(connection[1])
-            self.graph[connection[1]].append(connection[0])
+        for index, pheromone in enumerate(self.pheromone):
+            if pheromone > threshhold:
+                self.edges += 1
+                self.graph[self.paths[index, 0]].append(self.paths[index, 1])
+                self.graph[self.paths[index, 1]].append(self.paths[index, 0])
 
     # Function to safe new cycles
-    def safe_Cycles(self, mark: list):
+    def safe_Cycles(self, mark: list, N):
         """
 
         @param edges: list of int; number of the edges
         @param mark: list; marked nodes in a cycle
         """
-        new_cycles = list()
+        new_cycles = [[] for i in range(N)]
         for i in range(1, self.edges):
             if mark[i] != 0:
                 new_cycles[mark[i]].append(i)
@@ -132,8 +130,8 @@ class Map:
 
         @rtype: rate of pheromones vaporization from t to t+1
         """
-        for path in self.paths:
-            path[2] *= evaporation
+        for pheromone in self.pheromone:
+            pheromone *= evaporation
 
     def add_new_pheromones(self, Q=1):
         """
@@ -156,12 +154,11 @@ class Map:
         @param beta: float; from the paper to calculate the probability and give weights on desirability
         @return: np.ndarray, shape(possible nodes, probabilities) (possible node: int, probability 0-1);
         """
+        # print(ant_pos)
         distances = np.array([[0]])
         pheromones = np.array([[0]])
         possible_nodes = np.array([[0]])
         for index, path in enumerate(self.paths):
-            print(path)
-            print(type(path))
             if ant_pos == path[0] or ant_pos == path[1]:
                 distances = np.append(distances, np.array([[(1 / self.compute_2node(path[0], path[1])) ** alpha]]), axis=0)
                 pheromones = np.append(pheromones, np.array([self.pheromone[index] ** beta]), axis=0)
@@ -169,15 +166,14 @@ class Map:
                 possible_nodes = np.append(possible_nodes, np.array([[path[1]]]), axis=0)
             elif ant_pos == path[1]:
                 possible_nodes = np.append(possible_nodes, np.array([[path[0]]]), axis=0)
-        print(possible_nodes)
         distances = distances[1:]
         pheromones = pheromones[1:]
         possible_nodes = possible_nodes[1:]
         components = distances * pheromones
         sum_up = np.sum(components, axis=0)
         probabilities = components / sum_up
-        print(probabilities)
         possible_nodes = np.concatenate((possible_nodes, probabilities), axis=1)
+        #print(possible_nodes)
         return possible_nodes
 
     # old version do not use this function below, use the one above
