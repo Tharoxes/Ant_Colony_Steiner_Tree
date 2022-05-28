@@ -13,13 +13,15 @@ class Map:
         self.connections = list()
         self.lengths = np.asarray([])
         self.graph = [[] for i in range(self.N)]
-        self.cycles = [[] for i in range(self.N)]
+        self.cycles = list()
         self.edges = 0
+        self.cyclenumber = 0
         self.flag_node = len(self.node_list)
 
     def add_path(self, path: np.ndarray):
-        np.append(self.paths, path, axis=0)
-        np.append(self.pheromone, np.asarray[[0.4]], axis=0)
+        self.paths = np.append(self.paths, path, axis=0)
+        #print(self.pheromone)
+        self.pheromone = np.append(self.pheromone, np.array([[0.4]]), axis=0)
 
     def compute_2node(self, index1: int, index2: int) -> float:
         return np.sum(np.square(self.node_list[index1]['position'] - self.node_list[index2]['position']))
@@ -38,17 +40,27 @@ class Map:
     def create_node(self, index: int, position: np.ndarray, real: bool):
         self.node_list[index] = {"position": position, "real": real}
 
+    def create_paths_and_pheromones(self, pheromone=0.4):
+        for x in list(self.node_list)[:-1]:
+            #print(x)
+            #print(list(self.node_list)[-1])
+            self.add_path(np.array([[x, list(self.node_list)[-1]]]))
+
     def new_artificial_node(self, index, cycle):
-        center = np.asarray([0, 0])
+        center = np.array([0, 0])
         counter = 0
         for i in cycle:
-            center += self.node_list[i]["position"]
+            #print(i)
+            center = np.add(center, self.node_list[i]["position"])
+            #print(self.node_list[i]["position"])
             counter += 1
-        center = center / 4
+        center = center / counter
+        #print("Here: ", center)
         self.create_node(index, center, False)
+        self.create_paths_and_pheromones()
 
     # dfs function to find cycles in graph
-    def dfs_cycles(self, u, p, color: list, mark: list, par: list, cyclenumber):
+    def dfs_cycles(self, u, p, color: list, mark: list, par: list):
         """
 
         @param u: int; actual node
@@ -66,15 +78,15 @@ class Map:
         # backtrack based on parents to
         # find the complete cycle.
         if color[u] == 1:
-            cyclenumber += 1
+            self.cyclenumber += 1
             cur = p
-            mark[cur] = cyclenumber
+            mark[cur] = self.cyclenumber
 
             # backtrack the vertex which are
             # in the current cycle thats found
             while cur != u:
                 cur = par[cur]
-                mark[cur] = cyclenumber
+                mark[cur] = self.cyclenumber
 
             return
 
@@ -89,7 +101,7 @@ class Map:
             # if it has not been visited previously
             if v == par[u]:
                 continue
-            self.dfs_cycles(v, u, color, mark, par, cyclenumber)
+            self.dfs_cycles(v, u, color, mark, par)
 
         # completely visited.
         color[u] = 2
@@ -116,14 +128,20 @@ class Map:
         @param mark: list; marked nodes in a cycle
         """
         new_cycles = [[] for i in range(N)]
+        #print(type(new_cycles))
         for i in range(1, self.edges):
             if mark[i] != 0:
                 new_cycles[mark[i]].append(i)
+            # print(new_cycles)
+
+        new_cycles = [i for i in new_cycles if len(i) != 0]
 
         for j in new_cycles:
-            sorted_cycle = j.sort()
-            if sorted_cycle not in self.cycles:
-                self.cycles.append(sorted_cycle)
+            if len(j) < 3:
+                continue
+            j.sort()
+            if j not in self.cycles:
+                self.cycles.append(j)
 
     def evaporate(self, evaporation=0.9): # how to update new connections with low costs
         """
@@ -154,6 +172,7 @@ class Map:
         @param beta: float; from the paper to calculate the probability and give weights on desirability
         @return: np.ndarray, shape(possible nodes, probabilities) (possible node: int, probability 0-1);
         """
+        ant_pos = int(ant_pos)
         # print(ant_pos)
         distances = np.array([[0]])
         pheromones = np.array([[0]])

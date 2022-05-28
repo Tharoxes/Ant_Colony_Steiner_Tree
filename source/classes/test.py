@@ -1,7 +1,5 @@
 import numpy as np
 
-
-
 """
 class test:
     def __init__(self, list):
@@ -35,14 +33,33 @@ d = np.append(d, np.array([[3]]), axis=0)
 d = np.append(d, np.array([[4]]), axis=0)
 d = d[1:]
 
-print(distances)
-print(d)
+#print(distances)
+#print(d)
 bla = np.concatenate((distances, d), axis=1)
-print(bla)
-print(bla[1, 0])
+#print(bla)
+#print(bla[1, 0])
+
+dict = {
+    1: "h",
+    2: "a",
+}
+
+#print(list(dict)[-1])
+a = np.array([1, 2])
+#print(np.array([1, 2]))
+#print(type(a))
+
+a = [1, 2]
+a.append(3)
+print(a)
+
+a = np.array([3, 4])
+a = np.append(a, 5)
+print(a)
+print(type(np.sum(a)))
 
 N = 15
-#print(np.sum(np.square(np.array([4, 2])-np.array([2, 3]))))
+# print(np.sum(np.square(np.array([4, 2])-np.array([2, 3]))))
 
 j = 0
 a = [1, 2, 3, 4, 5, 9]
@@ -52,9 +69,8 @@ for i in a[j:]:
 
 a = [1, 2, 3, 4, 5, 9, 7, 8]
 for i in a[j:]:
-    #print(i)
+    # print(i)
     j += 1
-
 
 # variables to be used
 # in both functions
@@ -124,7 +140,7 @@ def printCycles(edges, mark: list):
 
     # print all the vertex with same cycle
     for i in range(1, cyclenumber + 1):
-        #print(cycles[i])
+        # print(cycles[i])
         """
         # Print the i-th cycle
         print("Cycle Number %d:" % i, end=" ")
@@ -133,6 +149,7 @@ def printCycles(edges, mark: list):
         print()
 
         """
+
 
 # Driver Code
 if __name__ == "__main__":
@@ -177,4 +194,3 @@ if __name__ == "__main__":
     b = np.array([[2], [2], [3], [3], [4], [4], [5]])
     c = a > 1
     # print(b[c])
-

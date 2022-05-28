@@ -21,6 +21,7 @@ from classes import ant, node
 from classes import map as mp
 
 
+
 def move_ant(ant: ant.Ant, map: mp.Map):
     """moves an Ant to a new node"""
     """rewrite to ask map an index -> map returns the possible next ones and their prob"""
@@ -98,15 +99,13 @@ def main():
             current_ant = ant.Ant(random.randint(0, real_nodes-1),
                                   real_nodes_index)  # if nodes start at 0 the last +1 needs to be deleted
             while not current_ant.visited_all:
-                # todo: move ant to index xy
-                # possible_paths = map.get_probability(current_ant.position) # todo: index xy
-                # ants_path = ... # add to the path, if not already visited
                 move_ant(current_ant, map)
             ants_connections.append(
                 current_ant.path)  # add the path of an ant to the list example [[0, 1][1, 3][3, 2][2, 4]]
 
         # add ants connections and compute their lengths, both lists are sorted
         map.compute_ants_path(ants_connections)
+        print("###############################################################################")
 
         # update pheromones (delete edges or evaporation)
         # old pheromones
@@ -119,22 +118,28 @@ def main():
         color = [0] * N
         par = [0] * N
         mark = [0] * N
-        cyclenumber = 0
+        map.cyclenumber = 0
         map.addEdges()
-        print(map.graph)
-        map.dfs_cycles(random.randint(0, real_nodes-1), -1, color, mark, par, cyclenumber)
-        print(cyclenumber)
-        print(mark)
+        map.dfs_cycles(random.randint(0, real_nodes-1), -1, color, mark, par)
+        #print(mark)
+        #print(map.cycles)
         map.safe_Cycles(mark, N)
 
         # add new nodes
         for j in map.cycles[artificial_nodes:]:
+            if len(j) == 0:
+                continue
+            #print(j)
             map.new_artificial_node(real_nodes + artificial_nodes, j)
             artificial_nodes += 1
 
-        if i % 11 == 0:
-            print(map.lengths[0])
-            print(len(map.node_list))
+
+        if i % 3 == 0:
+            print("################              ", i ,"              ######################")
+            #print(map.lengths[0])
+            #print(len(map.node_list))
+            #print(map.node_list)
+            #print(map.pheromone)
 
 
 if __name__ == "__main__":
