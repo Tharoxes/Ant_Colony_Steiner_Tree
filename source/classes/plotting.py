@@ -14,7 +14,7 @@ from bokeh.io import output_file, show, save, curdoc
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource
 from bokeh.layouts import layout
-import map as mp
+from classes import map as mp
 import numpy as np
 from bokeh.transform import linear_cmap
 from bokeh.palettes import RdYlBu, Turbo256
@@ -70,7 +70,7 @@ def plot_init(map: mp.Map):
     p.circle(x = "x", y = "y", color = "color", source = node_source)
     p.segment(x0 = "x0", y0 = "y0", x1 = "x1", y1 = "y1", color = edge_color, alpha = 1, line_width = 1, source = edge_source)
     
-    # show(p)
+    show(p)
     
     
     return p, edge_source, node_source
@@ -132,55 +132,55 @@ def update_sources():
 
 
 
-node_dict = {
-    1: {"position": np.asarray([0,1]), "real": True},
-    2: {"position": np.asarray([0,0]), "real": True},
-    3: {"position": np.asarray([2,1]), "real": True},
-    4: {"position": np.asarray([2,0]), "real": True},
-}
+# node_dict = {
+#     1: {"position": np.asarray([0,1]), "real": True},
+#     2: {"position": np.asarray([0,0]), "real": True},
+#     3: {"position": np.asarray([2,1]), "real": True},
+#     4: {"position": np.asarray([2,0]), "real": True},
+# }
 
-paths = [[1,2], [2,3], [1,3], [2,4]]
+# paths = [[1,2], [2,3], [1,3], [2,4]]
 
-pheromones = [100, 50, 80, 10]
+# pheromones = [100, 50, 80, 10]
 
-mapi = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
-
-
-# plot, edge_source, node_source = plot_init(mapi)
-maplist = [mapi]
+# mapi = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
 
 
-# show(plot)
-# while True:
-for k in range(0,10):
-    # print(k)
-    path = []
-    pheromones = []
-    for idx, edge in enumerate(paths):
-        path.append([np.random.randint(1,5), np.random.randint(1,5)])
-        pheromones.append(np.random.randint(0,100))
+# # plot, edge_source, node_source = plot_init(mapi)
+# maplist = [mapi]
+
+
+# # show(plot)
+# # while True:
+# for k in range(0,10):
+#     # print(k)
+#     path = []
+#     pheromones = []
+#     for idx, edge in enumerate(paths):
+#         path.append([np.random.randint(1,5), np.random.randint(1,5)])
+#         pheromones.append(np.random.randint(0,100))
         
-    # print(paths)
-    mapi = mp.Map(node_list=node_dict, paths=path, pheromones=pheromones)
-    maplist.append(mapi)
+#     # print(paths)
+#     mapi = mp.Map(node_list=node_dict, paths=path, pheromones=pheromones)
+#     maplist.append(mapi)
 
-paths = [[1,4], [2,3], [1,2], [2,4]]
-pheromones = [90, 20, 3, 10]
+# paths = [[1,4], [2,3], [1,2], [2,4]]
+# pheromones = [90, 20, 3, 10]
 
-mapi = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
+# mapi = mp.Map(node_list=node_dict, paths=paths, pheromones=pheromones)
 
 
 
-"""everithyng below here needs to be in the main file"""
-maplist.append(mapi)
+# """everithyng below here needs to be in the main file"""
+# maplist.append(mapi)
         
       
-mapindex = 0
-plot, edge_source, node_source = plot_init(maplist[mapindex])
+# mapindex = 0
+# plot, edge_source, node_source = plot_init(maplist[mapindex])
 
-doc = curdoc()
-doc.add_root(plot)
-doc.add_periodic_callback(update_sources, 1000)
+# doc = curdoc()
+# doc.add_root(plot)
+# doc.add_periodic_callback(update_sources, 1000)
 
 
 

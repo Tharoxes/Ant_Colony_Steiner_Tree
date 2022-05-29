@@ -19,6 +19,8 @@ import heapq
 import math
 from classes import ant, node
 from classes import map as mp
+from classes import plotting as aniplot
+from bokeh.io import show
 
 
 
@@ -140,7 +142,11 @@ def main():
             #print(len(map.node_list))
             #print(map.node_list)
             #print(map.pheromone)
-
+        
+        
+        p, sw, sn = aniplot.plot_init(map)
+        show(p)
+        # print(i)
 
 if __name__ == "__main__":
     main()
